@@ -29,7 +29,7 @@ unix {
 
 win32 {
   #add libs
-  LIBS += -L$$PWD/../lib/ -llibprotobuf$${SUFFIX_STR} \
+  LIBS += -L$$PWD/../larcmacs-protobuf/lib_x86/ -llibprotobuf$${SUFFIX_STR} \
           -lws2_32
 
   LIBS += -L$${MATLAB_DIR}/lib/win32/microsoft/ -llibeng \
@@ -52,7 +52,7 @@ TEMPLATE = app
 
 INCLUDEPATH += \
   $${SHARED_DIR}/net \
-  $${SHARED_DIR}/proto/cpp \
+  $${PROTO_DIR}/generated \
   $${SHARED_DIR}/util \
   $${SHARED_DIR}/rfprotocol \
   $${MATLAB_DIR}/include \
@@ -95,6 +95,17 @@ HEADERS  += \
     ipdialog.h \
     client.h \
     reference.h \
+
+  #messages defined through google protocol buffers (as compiled by protoc)
+  LIST = $$system(dir /B ..\\larcmacs-protobuf\\generated\\*.pb.cc)
+  for(item, LIST) {
+    SOURCES += $${PROTO_DIR}/generated/$${item}
+  }
+
+  LIST = $$system(dir /B ..\\larcmacs-protobuf\\generated\\*.pb.h)
+  for(item, LIST) {
+    HEADERS += $${PROTO_DIR}/generated/$${item}
+  }
 
 FORMS    += larcmacs.ui \
     remotecontrol.ui \
