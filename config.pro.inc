@@ -41,13 +41,10 @@ unix {
 
 }
 
-win32 {
+win32:!gcc {
   DEFINES += _CRT_SECURE_NO_WARNINGS
   DEFINES += WIN32_LEAN_AND_MEAN
   DEFINES += NOMINMAX
-
-  INCLUDEPATH += ../inc
-  INCLUDEPATH += ../larcmacs-protobuf/include
 
   QMAKE_CXXFLAGS += /wd4250
   QMAKE_CXXFLAGS += /Fd$(IntDir)
@@ -62,6 +59,10 @@ win32 {
   #enable debugging in release build
   #QMAKE_CXXFLAGS_RELEASE += /Zi
   #QMAKE_LFLAGS_RELEASE += /DEBUG
+}else {
+  QMAKE_CXXFLAGS += -Wno-unused-parameter -Wno-format
+  LIBS+=-L/c/Users/Irina/Desktop/pb/protobuf/src/.libs
 }
 
 OTHER_FILES +=
+

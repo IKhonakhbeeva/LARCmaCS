@@ -19,18 +19,23 @@ UI_DIR = ../build/LARCmaCS/ui
 #where to place intermediate resource files
 RCC_DIR = ../build/LARCmaCS/resources
 
-unix {
+gcc {
   #add google protocol buffers
   LIBS += -lprotobuf
 
-  #add opengl support
+  win32:LIBS += -lws2_32
+  unix { #add opengl support
   LIBS += -lGL -lGLU
+ }
 }
 
+include(../macsCommon/macsCommon.pri)
+
 win32 {
+  !gcc {
   #add libs
-  LIBS += -L$$PWD/../larcmacs-protobuf/lib_x86/ -llibprotobuf$${SUFFIX_STR} \
-          -lws2_32
+  LIBS += -L$$PWD/../larcmacs-protobuf/lib_x86/ -llibprotobuf$${SUFFIX_STR}
+  }
 
   LIBS += -L$${MATLAB_DIR}/lib/win32/microsoft/ -llibeng \
           -L$${MATLAB_DIR}/lib/win32/microsoft/ -llibmat \
@@ -61,6 +66,8 @@ INCLUDEPATH += \
 SOURCES += main.cpp\
   $${SHARED_DIR}/net/netraw.cpp \
   $${SHARED_DIR}/net/robocup_ssl_client.cpp \
+
+SOURCES += \
         larcmacs.cpp \
     fieldScene.cpp \
     sceneView.cpp \
