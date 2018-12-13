@@ -6,3 +6,4 @@
 /build/*
 /build*
 /proto-generated/*.pb*
+personal.pro.inc
