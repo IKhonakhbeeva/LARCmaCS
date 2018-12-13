@@ -5,4 +5,4 @@
 /bin/*.exe
 /build/*
 /build*
-/macsCommon/proto/cpp/*.pb*
+/proto-generated/*.pb*

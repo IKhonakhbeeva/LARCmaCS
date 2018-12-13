@@ -6,7 +6,10 @@
 
 #read the global configuration file
 include( ../config.pro.inc )
-
+#personal info
+include( ../personal.pro.inc)
+#generate and include proto-files
+include( ../proto-generated/proto.pro.inc)
 #where to place built objects
 OBJECTS_DIR = ../build/LARCmaCS/obj$${SUFFIX_STR}
 
@@ -33,18 +36,14 @@ gcc: include(../macsCommon/macsCommon.pri)
 win32 {
   #add libs
   LIBS += -lws2_32
-#  gcc : LIB+=-lprotobuf
-  gcc: LIBS += -lprotobuf.dll
-  !gcc: LIBS += -L$${PROTO_DIR}/$${PREFIX_STR}lib/ -llibprotobuf$${SUFFIX_STR}
-  !amd32: WIN_BIT = win32
-  amd64: WIN_BIT = win64
-  LIBS += -L$${MATLAB_DIR}/lib/$${WIN_BIT}/microsoft/ -llibeng \
-          -L$${MATLAB_DIR}/lib/$${WIN_BIT}/microsoft/ -llibmat \
-          -L$${MATLAB_DIR}/lib/$${WIN_BIT}/microsoft/ -llibmx
+  LIBS += -L$${MATLAB_DIR}/lib/win$${BIT}/microsoft/ -llibeng \
+          -L$${MATLAB_DIR}/lib/win$${BIT}/microsoft/ -llibmat \
+          -L$${MATLAB_DIR}/lib/win$${BIT}/microsoft/ -llibmx
 }
 
 QT       += core gui
 QT       += network
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -61,16 +60,13 @@ INCLUDEPATH += \
   $${SHARED_DIR}/rfprotocol \
   $${MATLAB_DIR}/include \
   $${SHARED_DIR}/vartypes
-#INCLUDEPATH += $${PROTO_DIR}/include
 
-INCLUDEPATH += $${PROTO_DIR}/include
-
-SOURCES += main.cpp\
+SOURCES += main.cpp \
   $${SHARED_DIR}/net/netraw.cpp \
   $${SHARED_DIR}/net/robocup_ssl_client.cpp \
 
 SOURCES += \
-        larcmacs.cpp \
+    larcmacs.cpp \
     fieldScene.cpp \
     sceneView.cpp \
     receiver.cpp \
@@ -82,6 +78,7 @@ SOURCES += \
     ipdialog.cpp \
     client.cpp \
     reference.cpp \
+
 
 HEADERS  += \
   $${SHARED_DIR}/net/netraw.h \
@@ -104,17 +101,6 @@ HEADERS  += \
     ipdialog.h \
     client.h \
     reference.h \
-
-  #messages defined through google protocol buffers (as compiled by protoc)
-  LIST = $$system(dir /B ..\proto-generated\*.pb.cc)
-  for(item, LIST) {
-    SOURCES += ../proto-generated/$${item}
-  }
-
-  LIST = $$system(dir /B ..\proto-generated\*.pb.h)
-  for(item, LIST) {
-    HEADERS += ../proto-generated/$${item}
-  }
 
 FORMS    += larcmacs.ui \
     remotecontrol.ui \

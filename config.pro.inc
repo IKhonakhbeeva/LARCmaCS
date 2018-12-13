@@ -6,7 +6,6 @@ CONFIG += console
 DEBUG_SUFFIX        = 
 RELEASE_SUFFIX      = 
 
-LARC_TARGET_PLATFORM =
 #win32:!mingw {PROTOC_BIN_DIR=$${VCPKG_DIR}/bin/}
 #PROTOC_VER=$$system($${PROTOC_BIN_DIR}protoc --version)
 #message("Compiler:$$QMAKE_CXX from $$(PATH) with protoc $$PROTOC_VER")
@@ -26,6 +25,8 @@ mingw {
 win32 {
   DEBUG_SUFFIX      = d
   DEBUG_PREFIX      = debug/
+  !amd64: BIT = 32
+  amd64: BIT = 64
 }
 
 CONFIG(debug, debug|release) {
@@ -41,25 +42,7 @@ SHARED_DIR = ../macsCommon
 LIB_DIR =
 #LIB_DIR = ../lib
 DESTDIR = ../bin$${SUFFIX_STR}
-# ----------PERSONAL-----------
-#MATLAB_DIR = d:/Work)/MATLAB/R2012b_x86/extern/
 
-!amd64: MATLAB_DIR = 'C:/Program Files (x86)/MATLAB/R2015b/extern/'
-amd64: MATLAB_DIR = 'C:/Program Files/MATLAB/R2015b/extern/'
-
-VCPKG_DIR = C:/Users/Irina/Desktop/pb/vcpkg
-MSYS_DIR = C:/tools/msys64
-# -----------------------------
-
-PROTO_64_DIR = $${VCPKG_DIR}/installed/x64-windows
-PROTO_32_DIR = $${VCPKG_DIR}/installed/x86-windows
-PROTO_GCC_DIR = $${MSYS_DIR}/usr
-gcc {
-  PROTO_DIR = $${PROTO_GCC_DIR}
-} else {
-  !amd64: PROTO_DIR = $${PROTO_32_DIR}
-  amd64: PROTO_DIR = $${PROTO_64_DIR}
-}
 
 #INCLUDEPATH += ../inc
 
