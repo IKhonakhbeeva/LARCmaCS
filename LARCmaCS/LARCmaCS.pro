@@ -19,29 +19,28 @@ UI_DIR = ../build/LARCmaCS/ui
 #where to place intermediate resource files
 RCC_DIR = ../build/LARCmaCS/resources
 
-gcc {
+
+unix {
   #add google protocol buffers
   LIBS += -lprotobuf
 
-  win32:LIBS += -lws2_32
-  unix { #add opengl support
   LIBS += -lGL -lGLU
- }
+
 }
 
-include(../macsCommon/macsCommon.pri)
+gcc: include(../macsCommon/macsCommon.pri)
 
 win32 {
-  !gcc {
   #add libs
-  LIBS += -L$$PWD/../larcmacs-protobuf/lib_x86/ -llibprotobuf$${SUFFIX_STR}
-  }
-
-  LIBS += -L$${MATLAB_DIR}/lib/win32/microsoft/ -llibeng \
-          -L$${MATLAB_DIR}/lib/win32/microsoft/ -llibmat \
-          -L$${MATLAB_DIR}/lib/win32/microsoft/ -llibmx
-
-
+  LIBS += -lws2_32
+#  gcc : LIB+=-lprotobuf
+  gcc: LIBS += -lprotobuf.dll
+  !gcc: LIBS += -L$${PROTO_DIR}/$${PREFIX_STR}lib/ -llibprotobuf$${SUFFIX_STR}
+  !amd32: WIN_BIT = win32
+  amd64: WIN_BIT = win64
+  LIBS += -L$${MATLAB_DIR}/lib/$${WIN_BIT}/microsoft/ -llibeng \
+          -L$${MATLAB_DIR}/lib/$${WIN_BIT}/microsoft/ -llibmat \
+          -L$${MATLAB_DIR}/lib/$${WIN_BIT}/microsoft/ -llibmx
 }
 
 QT       += core gui
@@ -57,11 +56,14 @@ TEMPLATE = app
 
 INCLUDEPATH += \
   $${SHARED_DIR}/net \
-  $${PROTO_DIR}/generated \
+  ../proto-generated \
   $${SHARED_DIR}/util \
   $${SHARED_DIR}/rfprotocol \
   $${MATLAB_DIR}/include \
   $${SHARED_DIR}/vartypes
+#INCLUDEPATH += $${PROTO_DIR}/include
+
+INCLUDEPATH += $${PROTO_DIR}/include
 
 SOURCES += main.cpp\
   $${SHARED_DIR}/net/netraw.cpp \
@@ -104,17 +106,19 @@ HEADERS  += \
     reference.h \
 
   #messages defined through google protocol buffers (as compiled by protoc)
-  LIST = $$system(dir /B ..\\larcmacs-protobuf\\generated\\*.pb.cc)
+  LIST = $$system(dir /B ..\proto-generated\*.pb.cc)
   for(item, LIST) {
-    SOURCES += $${PROTO_DIR}/generated/$${item}
+    SOURCES += ../proto-generated/$${item}
   }
 
-  LIST = $$system(dir /B ..\\larcmacs-protobuf\\generated\\*.pb.h)
+  LIST = $$system(dir /B ..\proto-generated\*.pb.h)
   for(item, LIST) {
-    HEADERS += $${PROTO_DIR}/generated/$${item}
+    HEADERS += ../proto-generated/$${item}
   }
 
 FORMS    += larcmacs.ui \
     remotecontrol.ui \
     ipdialog.ui \
     reference.ui \
+
+DISTFILES +=
