@@ -9,15 +9,15 @@ RELEASE_SUFFIX      =
 #win32:!mingw {PROTOC_BIN_DIR=$${VCPKG_DIR}/bin/}
 #PROTOC_VER=$$system($${PROTOC_BIN_DIR}protoc --version)
 #message("Compiler:$$QMAKE_CXX from $$(PATH) with protoc $$PROTOC_VER")
-
 !contains(QT_ARCH, i386):CONFIG += amd64
 mingw {
-  amd64 { message("Mingw64") }
-  else  { message("Mingw32") }
+  amd64 { COMPILER_ARCH="MINGW64" }
+  else  { COMPILER_ARCH="MINGW32" }
 } else: win32 {
-  amd64 {  message("MSVC 64") }
-  else  { message("MSVC 32") }
+  amd64 { COMPILER_ARCH="MSVC64" }
+  else  { COMPILER_ARCH="MSVC32" }
 } else  {
+  COMPILER_ARCH="Other"
   error($$CONFIG)
 }
 

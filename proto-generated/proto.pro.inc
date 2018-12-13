@@ -1,40 +1,41 @@
 #define path to directories with protobuf headers and libs
-PROTO_64_DIR = $${VCPKG_DIR}/installed/x64-windows
-PROTO_32_DIR = $${VCPKG_DIR}/installed/x86-windows
-PROTO_GCC_DIR = $${MSYS_DIR}/usr
-#gcc {
-  PROTO_DIR = $${PROTO_GCC_DIR}
-#} else {
-#  !amd64: PROTO_DIR = $${PROTO_32_DIR}
-#  amd64: PROTO_DIR = $${PROTO_64_DIR}
-#}
-#gcc:
-LIBS += -L$${MSYS_DIR}/mingw$${BIT}/lib/ -lprotobuf.dll
-#!gcc: LIBS += -L$${PROTO_DIR}/$${PREFIX_STR}lib/ -llibprotobuf$${SUFFIX_STR}
+
+equals(COMPILER_ARCH,"MINGW32")|equals(COMPILER_ARCH,"MINGW64"){
+  PROTO_DIR = $${MSYS_DIR}/usr
+  LIBS += -lprotobuf
+  PROTOC_DIR =
+}
+equals(COMPILER_ARCH,"MSVC32"): PROTO_DIR = $${VCPKG_DIR}/installed/x86-windows
+equals(COMPILER_ARCH,"MSVC64"): PROTO_DIR = $${VCPKG_DIR}/installed/x64-windows
+equals(COMPILER_ARCH,"MSVC32")|equals(COMPILER_ARCH,"MSVC64"){
+  LIBS += -L$${PROTO_DIR}/$${PREFIX_STR}lib/ -llibprotobuf$${SUFFIX_STR}
+  PROTOC_DIR = $${PROTO_DIR}/tools/protobuf/
+}
 
 INCLUDEPATH += $${PROTO_DIR}/include
 
-PROTOC_DIR = $${MSYS_DIR}/mingw$${BIT}/bin/
+#Check if 'protoc' is available
+PROTOC_VER = $$system($${PROTOC_DIR}protoc --version)
+equals(PROTOC_VER,"") {
+  error(Is the google protocol buffer compiler 'protoc' installed?)
+}
 
 #build the protocol buffer code
 #message(Compiling Protocol Buffer CPP Sources from .proto Files...)
 LIST = $$system(dir /B proto\*.proto)
 for(item, LIST) {
-  message ($${PROTOC_DIR}protoc.exe)
-  PROTO_ERR+=$$system($${PROTOC_DIR}protoc.exe --cpp_out=$$PWD --proto_path=$$PWD/proto $${item})
-  message ($$PROTO_ERR)
+  $$system($${PROTOC_DIR}protoc.exe --cpp_out=$$PWD --proto_path=$$PWD/proto $${item}))
 }
-!isEmpty(PROTO_ERR) {
-  error(Failure building proto-buffer sources. Is the google protocol buffer compiler 'protoc' installed?)
-}
+
+
 
 #messages defined through google protocol buffers (as compiled by protoc)
 LIST = $$system(dir /B *.pb.cc)
 for(item, LIST) {
-  SOURCES += $$PWD/$${item}
+  SOURCES += $${PWD}/$${item}
 }
 
 LIST = $$system(dir /B *.pb.h)
 for(item, LIST) {
-  HEADERS += $$PWD/$${item}
+  HEADERS += $${PWD}/$${item}
 }
