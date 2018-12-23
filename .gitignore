@@ -6,3 +6,4 @@
 /build/*
 /build*
 /proto-generated/generated/*.pb*
+personal.pri
