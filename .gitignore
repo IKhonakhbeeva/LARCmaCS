@@ -5,5 +5,4 @@
 /bin/*.exe
 /build/*
 /build*
-/proto-generated/*.pb*
-personal.pro.inc
+/proto-generated/generated/*.pb*

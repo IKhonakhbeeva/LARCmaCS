@@ -107,7 +107,7 @@ HEADERS += \
 #   $$PWD/util/field.h \
 #   $$PWD/util/field_default_constants.h \
 
-SOURCES += \
+#SOURCES += \
 #   $$PWD/net/netraw.cpp \
 #   $$PWD/net/robocup_ssl_client.cpp \
 #   $$PWD/net/robocup_ssl_server.cpp \
