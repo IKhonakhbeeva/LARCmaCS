@@ -1,7 +1,7 @@
 #define path to directories with protobuf headers and libs
 
 mingw {
-  PROTO_DIR = $${MSYS_DIR}/usr
+  PROTO_DIR = $${MSYS_DIR}/mingw$${BIT}
   LIBS += -lprotobuf
   PROTOC_DIR =
   DLLS += $$MSYS_DIR/mingw$${BIT}/bin/libprotobuf.dll
