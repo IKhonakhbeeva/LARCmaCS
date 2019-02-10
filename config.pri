@@ -21,7 +21,7 @@ win32: mingw {
   amd64 { message(MSVC64) }
   else  { message(MSVC32) }
 } else: unix: linux {
-  message { LINUX }
+  message(LINUX)
 } else {
   message(OTHER)
   error($$CONFIG)

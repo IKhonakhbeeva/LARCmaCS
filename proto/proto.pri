@@ -27,6 +27,7 @@ msvc {
 
 linux | mingw {
   CONFIG *= link_pkgconfig
+  win32: PKG_CONFIG_PATH = $$MSYS_DIR/mingw$$BIT/lib/pkgconfig
   PKGCONFIG *= protobuf
 }
 

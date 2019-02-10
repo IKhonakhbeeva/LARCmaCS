@@ -15,7 +15,7 @@ SHARED_DIR = macsCommon
 include (LARCmaCS/LARCmaCS.pri)
 
 defineReplace(fullSystemPath) {
-	return($$system_quote($$system_path($$clean_path($$absolute_path($$1)))))
+        return($$system_path($$clean_path($$absolute_path($$1))))
 }
 
 defineTest(copyToDestdir) {
@@ -42,11 +42,10 @@ copyToDestdir($$INIT_FILES)
 win32 {
 	LARCMACS_RUNNER = LARCmaCS.cmd
 
-        APPEND_PATH = $$fullSystemPath($${MATLAB_DIR}/bin/win$$BIT)
-	APPEND_PATH += $$fullSystemPath($$[QT_INSTALL_BINS])
+        APPEND_PATH = $$fullSystemPath($$[QT_INSTALL_BINS])
 	msvc: APPEND_PATH += $$fullSystemPath($${PROTO_DIR}/$${PREFIX_STR}bin/)
-	APPEND_PATH = $$join(APPEND_PATH, ; , ;)
-
+        APPEND_PATH += $$fullSystemPath($${MATLAB_DIR}/bin/win$$BIT)
+        APPEND_PATH = $$join(APPEND_PATH, ; , ;)
 } else: linux {
 	LARCMACS_RUNNER = LARCmaCS.sh
 	LARCMACS_LD_LIBRARY_PATH=$$[QT_INSTALL_LIBS]:$$fullSystemPath($$MATLAB_LIB_DIR)
