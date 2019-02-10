@@ -19,7 +19,7 @@ INCLUDEPATH += $${SHARED_DIR}/vartypes
 win32 {
   #add libs
   LIBS += -lws2_32
-  MATLAB_LIB_DIR = $${MATLAB_DIR}/lib/win$${BIT}/microsoft/
+  MATLAB_LIB_DIR = $${MATLAB_DIR}/extern/lib/win$${BIT}/microsoft/
   LIBS += -llibeng  -llibmat  -llibmx
 }
 
@@ -44,9 +44,7 @@ INCLUDEPATH += \
   $${SHARED_DIR}/net \
   $${SHARED_DIR}/util \
   $${SHARED_DIR}/rfprotocol \
-  $${MATLAB_DIR}/include \
-
-linux: INCLUDEPATH += $${MATLAB_DIR}/extern/include
+  $${MATLAB_DIR}/extern/include \
 
 SOURCES +=  \
   $${SHARED_DIR}/net/netraw.cpp \

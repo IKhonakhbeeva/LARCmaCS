@@ -42,7 +42,7 @@ copyToDestdir($$INIT_FILES)
 win32 {
 	LARCMACS_RUNNER = LARCmaCS.cmd
 
-	APPEND_PATH = $$fullSystemPath($${MATLAB_DIR}/../bin/win$$BIT)
+        APPEND_PATH = $$fullSystemPath($${MATLAB_DIR}/bin/win$$BIT)
 	APPEND_PATH += $$fullSystemPath($$[QT_INSTALL_BINS])
 	msvc: APPEND_PATH += $$fullSystemPath($${PROTO_DIR}/$${PREFIX_STR}bin/)
 	APPEND_PATH = $$join(APPEND_PATH, ; , ;)
@@ -59,3 +59,4 @@ win32 {
 	linux:QMAKE_POST_LINK += chmod --reference=$$shell_path($$eval($${LARCMACS_RUNNER}.in.input)) $$shell_path($$eval($${LARCMACS_RUNNER}.in.output))
 	QMAKE_SUBSTITUTES += $${LARCMACS_RUNNER}.in
 }
+OTHER_FILES += protobuf.prf
