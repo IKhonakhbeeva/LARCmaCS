@@ -31,6 +31,9 @@ build_script:
   - set PATH=%QT_DIR%\bin;%MSYS_DIR%\mingw%bit%\bin;%PATH%;
   - mkdir C:\build_mingw_%platform%
   - cd C:\build_mingw_%platform%
+  - echo "%PKG_CONFIG_PATH%"
+  - reg query HKEY_CURRENT_USER\Software
+  - reg query HKEY_LOCAL_MACHINE\Software
   - qmake.exe C:\LARCmaCS\LARCmaCS.pro -spec win32-g++ "CONFIG+=release" "MATLAB_DIR=%MATLAB_DIR%" "MSYS_DIR=%MSYS_DIR%" 
   - C:\Qt\Tools\%mingw_ver%\bin\mingw32-make.exe qmake_all
   - C:\Qt\Tools\%mingw_ver%\bin\mingw32-make.exe -j4
